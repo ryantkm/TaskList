@@ -13,9 +13,13 @@ class AddTasksTableViewCell: UITableViewCell {
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var addTaskTextField: UITextField!
     
+    var favorite: Bool = false
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        favoriteButton.backgroundColor = UIColor.orangeColor()
+
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -25,5 +29,14 @@ class AddTasksTableViewCell: UITableViewCell {
     }
 
     @IBAction func favoriteButtonTapped(sender: UIButton) {
+        if addTaskTextField.isFirstResponder() {
+            favorite = !favorite
+            if favorite {
+                favoriteButton.backgroundColor = UIColor.blueColor()
+            }
+            else {
+                favoriteButton.backgroundColor = UIColor.orangeColor()
+            }
+        }
     }
 }

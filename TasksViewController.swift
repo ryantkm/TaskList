@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TasksViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TasksViewController: UIViewController, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -25,13 +25,25 @@ class TasksViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         baseArray = [[task1, task2, task3], []]
         
+        tableView.backgroundColor = UIColor.clearColor()
+        
+        let gestureRecogniser = UILongPressGestureRecognizer(target: self, action: "longPressRecognised:")
+        gestureRecogniser.minimumPressDuration = 1.0
+        tableView.addGestureRecognizer(gestureRecogniser)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardDidShowNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardDidHideNotification, object: nil)
-
+        
         // Do any additional setup after loading the view.
     }
-
+    
+    func longPressRecognised(gestureRecogniser: UILongPressGestureRecognizer) {
+        if !tableView.editing {
+            tableView.editing = true
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -51,11 +63,17 @@ class TasksViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
             else {
                 let addTasksTableViewCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! AddTasksTableViewCell
-                if addTasksTableViewCell.addTaskTextField != "" {
-                    print("add new task")
+                if addTasksTableViewCell.addTaskTextField.text != "" {
+                    let newTask = TaskList(title: addTasksTableViewCell.addTaskTextField.text!, dueDate: NSDate(), completed: false, favorite: addTasksTableViewCell.favorite, repeated: nil, reminderDate: nil)
+                    baseArray[0].append(newTask)
+                    tableView.reloadData()
+                    addTasksTableViewCell.addTaskTextField.text = ""
+                    addTasksTableViewCell.addTaskTextField.resignFirstResponder()
                 }
                 else {
-                    print("error")
+                    let errorAlert = UIAlertController(title: "Empty Task", message: "Please enter a title before adding a task.", preferredStyle: UIAlertControllerStyle.Alert)
+                    errorAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                    presentViewController(errorAlert, animated: true, completion: nil)
                 }
             }
         }
@@ -104,6 +122,7 @@ class TasksViewController: UIViewController, UITableViewDataSource, UITableViewD
         if indexPath.section == 0 {
             let cell: AddTasksTableViewCell = tableView.dequeueReusableCellWithIdentifier("AddTasksCell") as! AddTasksTableViewCell
             cell.backgroundColor = UIColor(red: 110/255, green: 30/255, blue: 240/255, alpha: 0.8)
+            cell.favoriteButton.backgroundColor = UIColor.orangeColor()
             return cell
         }
         
@@ -134,7 +153,11 @@ class TasksViewController: UIViewController, UITableViewDataSource, UITableViewD
                 cell.favoriteButton.backgroundColor = UIColor.orangeColor()
             }
             
-            cell.backgroundColor = UIColor(red: 160/255, green: 40/255, blue: 100/255, alpha: 0.8)
+//            cell.backgroundColor = UIColor(red: 160/255, green: 40/255, blue: 100/255, alpha: 0.8)
+            
+            cell.indexPath = indexPath
+            cell.delegate = self
+            
             return cell
         }
             
@@ -157,5 +180,81 @@ class TasksViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else {
             return 0
         }
+    }
+
+//extension TasksViewController: UITableViewDataSource {
+//}
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 2 && baseArray[1].count > 0 {
+            return "\(baseArray[1].count) completed items"
+        }
+        return ""
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if indexPath.section == 0 {
+            return false
+        }
+        return true
+    }
+}
+
+
+extension TasksViewController: UITableViewDelegate {
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.separatorInset = UIEdgeInsetsZero
+        cell.layoutMargins = UIEdgeInsetsZero
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 2 && baseArray[1].count > 0 {
+            return 100
+        }
+        return 0
+    }
+    
+    // setting height of the footer after each section
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 5.0
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        if tableView.editing {
+            return UITableViewCellEditingStyle.None
+        }
+        return UITableViewCellEditingStyle.Delete
+    }
+    
+    // remove indent during editing mode
+    func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
+}
+
+extension TasksViewController: TasksTableViewCellDelegate {
+
+    func completeTask(indexPath: NSIndexPath) {
+        print("Task completed")
+        var selectedTask = baseArray[indexPath.section - 1][indexPath.row]
+        selectedTask.completed = !selectedTask.completed
+        if indexPath.section == 1 {
+            baseArray[1].append(selectedTask)
+        }
+        else {
+            baseArray[0].append(selectedTask)
+        }
+        baseArray[indexPath.section - 1].removeAtIndex(indexPath.row)
+        
+        tableView.reloadData()
+    }
+    
+    func favoriteTask(indexPath: NSIndexPath) {
+        print("Task favorited")
+        var selectedTask = baseArray[indexPath.section - 1][indexPath.row]
+        selectedTask.favorite = !selectedTask.favorite
+        baseArray[indexPath.section - 1][indexPath.row] = selectedTask
+        
+        tableView.reloadData()
     }
 }

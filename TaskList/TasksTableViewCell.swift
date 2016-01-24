@@ -8,12 +8,21 @@
 
 import UIKit
 
+protocol TasksTableViewCellDelegate {
+    func completeTask(indexPath: NSIndexPath)
+    func favoriteTask(indexPath: NSIndexPath)
+}
+
 class TasksTableViewCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dueDateLabel: UILabel!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var completedButton: UIButton!
+    
+    var indexPath: NSIndexPath!
+    
+    var delegate: TasksTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,8 +36,25 @@ class TasksTableViewCell: UITableViewCell {
     }
 
     @IBAction func favoriteButtonTapped(sender: UIButton) {
+        delegate?.favoriteTask(indexPath)
     }
     
     @IBAction func completedButtonTapped(sender: UIButton) {
+        delegate?.completeTask(indexPath)
+    }
+    
+    // hidding some elements when in edit mode
+    override func setEditing(editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: true)
+        if editing {
+            dueDateLabel.hidden = true
+            favoriteButton.hidden = true
+            completedButton.hidden = true
+        }
+        else {
+            dueDateLabel.hidden = false
+            favoriteButton.hidden = false
+            completedButton.hidden = false
+        }
     }
 }

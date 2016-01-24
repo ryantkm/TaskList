@@ -32,7 +32,7 @@
                                                     <rect key="frame" x="376" y="7" width="30" height="30"/>
                                                     <color key="backgroundColor" red="0.17254901959999999" green="0.47843137250000001" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
-                                                        <action selector="favoritedButtonTapped:" destination="xB7-m7-Yds" eventType="touchUpInside" id="9x4-Zy-MWU"/>
+                                                        <action selector="favoriteButtonTapped:" destination="xB7-m7-Yds" eventType="touchUpInside" id="Xvo-ts-yKv"/>
                                                     </connections>
                                                 </button>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wli-5M-i7F">
@@ -77,11 +77,12 @@
                                                     <rect key="frame" x="376" y="7" width="30" height="30"/>
                                                     <color key="backgroundColor" red="0.17254901959999999" green="0.47843137250000001" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
-                                                        <action selector="favoritedButtonTapped:" destination="tVt-5x-i0d" eventType="touchUpInside" id="bEN-kr-UOy"/>
+                                                        <action selector="favoriteButtonTapped:" destination="tVt-5x-i0d" eventType="touchUpInside" id="7o4-em-M4h"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.24508749565142152" green="0.99607371790512822" blue="0.8362232644501103" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="completedButton" destination="57J-vf-kr1" id="TEu-HP-iop"/>
                                             <outlet property="dueDateLabel" destination="oq2-fG-vR7" id="R9y-5O-tWe"/>
@@ -91,12 +92,11 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="WXa-8V-MwG"/>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="T74-vb-Es6"/>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="FqB-0h-Mr8"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="ePD-AD-PPu"/>
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="xhn-as-zQ2">
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="Tdg-xw-e4p">
