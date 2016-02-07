@@ -8,11 +8,13 @@
 
 import UIKit
 
-class TasksViewController: UIViewController, UITableViewDataSource {
+class TasksViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
     var baseArray: [[TaskList]] = []
+    
+    var selectedTaskIndexPath: NSIndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,9 +40,24 @@ class TasksViewController: UIViewController, UITableViewDataSource {
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        tableView.reloadData()
+    }
+    
     func longPressRecognised(gestureRecogniser: UILongPressGestureRecognizer) {
         if !tableView.editing {
             tableView.editing = true
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "tasksToSingleTaskSegue" {
+            let indexPath = sender as! NSIndexPath
+            let selectedTask = baseArray[indexPath.section - 1][indexPath.row]
+            let oneTaskViewController = segue.destinationViewController as! OneTaskViewController
+            oneTaskViewController.task = selectedTask
+            oneTaskViewController.mainVC = self
         }
     }
     
@@ -88,35 +105,26 @@ class TasksViewController: UIViewController, UITableViewDataSource {
     func keyboardWillHide(notification: NSNotification) {
         navigationItem.rightBarButtonItem?.title = "Edit"
     }
+}
+
+extension TasksViewController: UITableViewDataSource {
     
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if indexPath.section == 1 {
-            return true
-        }
-        else {
-            return false
-        }
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 3
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if editingStyle == UITableViewCellEditingStyle.Delete {
-            
-            tableView.beginUpdates()
-            baseArray[indexPath.section - 1].removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-            tableView.endUpdates()
-            
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        } else if section == 1 {
+            return baseArray[0].count
+        } else if section == 2 {
+            return baseArray[1].count
+        } else {
+            return 0
         }
     }
-    
-    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
-        
-        let currentTask = baseArray[0][sourceIndexPath.row]
-        baseArray[0].removeAtIndex(sourceIndexPath.row)
-        baseArray[0].insert(currentTask, atIndex: destinationIndexPath.row)
-    }
-    
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
@@ -125,7 +133,7 @@ class TasksViewController: UIViewController, UITableViewDataSource {
             cell.favoriteButton.backgroundColor = UIColor.orangeColor()
             return cell
         }
-        
+            
         else if indexPath.section == 1 || indexPath.section == 2 {
             let cell: TasksTableViewCell = tableView.dequeueReusableCellWithIdentifier("TasksCell") as! TasksTableViewCell
             let currentTasks = baseArray[indexPath.section - 1][indexPath.row]
@@ -153,7 +161,7 @@ class TasksViewController: UIViewController, UITableViewDataSource {
                 cell.favoriteButton.backgroundColor = UIColor.orangeColor()
             }
             
-//            cell.backgroundColor = UIColor(red: 160/255, green: 40/255, blue: 100/255, alpha: 0.8)
+            //            cell.backgroundColor = UIColor(red: 160/255, green: 40/255, blue: 100/255, alpha: 0.8)
             
             cell.indexPath = indexPath
             cell.delegate = self
@@ -165,25 +173,23 @@ class TasksViewController: UIViewController, UITableViewDataSource {
             return UITableViewCell()
         }
     }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 3
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else if section == 1 {
-            return baseArray[0].count
-        } else if section == 2 {
-            return baseArray[1].count
-        } else {
-            return 0
+
+    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if indexPath.section == 1 {
+            return true
+        }
+        else {
+            return false
         }
     }
-
-//extension TasksViewController: UITableViewDataSource {
-//}
+    
+    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        
+        let currentTask = baseArray[0][sourceIndexPath.row]
+        baseArray[0].removeAtIndex(sourceIndexPath.row)
+        baseArray[0].insert(currentTask, atIndex: destinationIndexPath.row)
+    }
+    
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 2 && baseArray[1].count > 0 {
             return "\(baseArray[1].count) completed items"
@@ -197,16 +203,37 @@ class TasksViewController: UIViewController, UITableViewDataSource {
         }
         return true
     }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            
+            tableView.beginUpdates()
+            baseArray[indexPath.section - 1].removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            tableView.endUpdates()
+            
+        }
+    }
 }
-
 
 extension TasksViewController: UITableViewDelegate {
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.section != 0 {
+            performSegueWithIdentifier("tasksToSingleTaskSegue", sender: indexPath)
+            selectedTaskIndexPath = indexPath
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        }
+    }
+    
+    // customising the length of the separator
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.separatorInset = UIEdgeInsetsZero
         cell.layoutMargins = UIEdgeInsetsZero
     }
     
+    // adjusting the height of header
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 2 && baseArray[1].count > 0 {
             return 100

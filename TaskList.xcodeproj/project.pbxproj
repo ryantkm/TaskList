@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E41B2341C65A5D600BB1165 /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E41B2331C65A5D600BB1165 /* DatePickerView.swift */; };
+		2E41B2361C6726F800BB1165 /* RepeatPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E41B2351C6726F800BB1165 /* RepeatPickerView.swift */; };
+		2EE9F8471C57CC2C0041D4E7 /* OneTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9F8461C57CC2C0041D4E7 /* OneTaskViewController.swift */; };
 		2EEC1FB71C467AC0004E8154 /* TasksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC1FB61C467AC0004E8154 /* TasksViewController.swift */; };
 		2EEC1FBA1C467BA8004E8154 /* TasksTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC1FB91C467BA8004E8154 /* TasksTableViewCell.swift */; };
 		2EEC1FBC1C467BBD004E8154 /* AddTasksTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC1FBB1C467BBD004E8154 /* AddTasksTableViewCell.swift */; };
@@ -38,6 +41,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2E41B2331C65A5D600BB1165 /* DatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
+		2E41B2351C6726F800BB1165 /* RepeatPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatPickerView.swift; sourceTree = "<group>"; };
+		2EE9F8461C57CC2C0041D4E7 /* OneTaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneTaskViewController.swift; sourceTree = "<group>"; };
 		2EEC1FB61C467AC0004E8154 /* TasksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TasksViewController.swift; path = ../TasksViewController.swift; sourceTree = "<group>"; };
 		2EEC1FB91C467BA8004E8154 /* TasksTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksTableViewCell.swift; sourceTree = "<group>"; };
 		2EEC1FBB1C467BBD004E8154 /* AddTasksTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTasksTableViewCell.swift; sourceTree = "<group>"; };
@@ -82,6 +88,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2EE9F8431C57C9730041D4E7 /* OneTaskViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2EE9F8461C57CC2C0041D4E7 /* OneTaskViewController.swift */,
+				2E41B2331C65A5D600BB1165 /* DatePickerView.swift */,
+				2E41B2351C6726F800BB1165 /* RepeatPickerView.swift */,
+			);
+			name = OneTaskViewController;
+			sourceTree = "<group>";
+		};
 		2EEC1FB81C467AF7004E8154 /* TasksViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +141,7 @@
 			children = (
 				2EEC1FB81C467AF7004E8154 /* TasksViewController */,
 				2EECF79C1C453BB7009F7D53 /* AppDelegate.swift */,
+				2EE9F8431C57C9730041D4E7 /* OneTaskViewController */,
 				2EEC1FBD1C47E110004E8154 /* Model */,
 				2EECF7A01C453BB7009F7D53 /* Main.storyboard */,
 				2EECF7A61C453BB7009F7D53 /* Assets.xcassets */,
@@ -287,11 +304,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EE9F8471C57CC2C0041D4E7 /* OneTaskViewController.swift in Sources */,
 				2EEC1FBA1C467BA8004E8154 /* TasksTableViewCell.swift in Sources */,
 				2EECF7A51C453BB7009F7D53 /* TaskList.xcdatamodeld in Sources */,
+				2E41B2361C6726F800BB1165 /* RepeatPickerView.swift in Sources */,
 				2EEC1FBC1C467BBD004E8154 /* AddTasksTableViewCell.swift in Sources */,
 				2EECF79D1C453BB7009F7D53 /* AppDelegate.swift in Sources */,
 				2EEC1FB71C467AC0004E8154 /* TasksViewController.swift in Sources */,
+				2E41B2341C65A5D600BB1165 /* DatePickerView.swift in Sources */,
 				2EEC1FBF1C47E12F004E8154 /* DataModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
